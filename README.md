@@ -112,4 +112,4 @@ jest.config.js
 
 📸 Tela exemplo
 
-![image](https://github.com/user-attachments/assets/6f03248d-5801-4ed8-b989-fee30a3b544a)
+![alt text](image.png)

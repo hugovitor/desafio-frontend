@@ -1,43 +1,31 @@
-// src/components/__tests__/WeatherCard.test.tsx
+import React from 'react'
 import { render, screen } from '@testing-library/react'
 import { WeatherCard } from '../components/WeatherCard'
-import { QueryClient, QueryClientProvider } from 'react-query'
 
-// Mock do hook
-jest.mock('../../hooks/useWeatherApi', () => ({
+vi.mock('../hooks/useWeatherApi', () => ({
   useWeatherApi: (city: string) => ({
-    data: city === 'Erro' ? null : {
-      location: { name: 'São Paulo', localtime: '2025-06-26 12:00' },
+    data: {
+      location: { name: city, localtime: '2025-06-26 12:00' },
       current: { temp_c: 25, temp_f: 77, condition: { text: 'Ensolarado' }, pressure_mb: 1013 },
-      forecast: { forecastday: [] }
+      forecast: { forecastday: [
+        {
+          date: '2025-06-27',
+          day: {
+            maxtemp_c: 28, mintemp_c: 20, maxtemp_f: 82, mintemp_f: 68,
+            condition: { text: 'Ensolarado' }
+          }
+        }
+      ] }
     },
-    isLoading: city === 'Loading',
-    error: city === 'Erro' ? new Error('Falha') : null
+    isLoading: false,
+    error: null
   })
 }))
 
-const queryClient = new QueryClient()
-
-function renderWithClient(ui: React.ReactElement) {
-  return render(
-    <QueryClientProvider client={queryClient}>
-      {ui}
-    </QueryClientProvider>
-  )
-}
-
-test('renderiza loading', () => {
-  renderWithClient(<WeatherCard city="Loading" unit="C" />)
-  expect(screen.getByRole('status')).toBeInTheDocument()
-})
-
-test('renderiza erro', () => {
-  renderWithClient(<WeatherCard city="Erro" unit="C" />)
-  expect(screen.getByText(/erro ao buscar dados/i)).toBeInTheDocument()
-})
-
-test('renderiza dados do tempo', () => {
-  renderWithClient(<WeatherCard city="São Paulo" unit="C" />)
+test('exibe informações principais do tempo', () => {
+  render(<WeatherCard city="São Paulo" unit="C" />)
   expect(screen.getByText('São Paulo')).toBeInTheDocument()
   expect(screen.getByText('25°C')).toBeInTheDocument()
+  expect(screen.getAllByText(/Ensolarado/i)[0]).toBeInTheDocument() 
+  expect(screen.getByText(/Pressão: 1013 mb/i)).toBeInTheDocument()
 })

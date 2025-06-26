@@ -1,38 +1,28 @@
-import { motion } from 'framer-motion'
+import React from 'react'
 import { useState } from 'react'
 import { Input, Button, HStack } from '@chakra-ui/react'
 
-interface CitySelectorProps {
-  onSearch: (city: string) => void
-}
 
-const MotionButton = motion(Button)
-
-export function CitySelector({ onSearch }: CitySelectorProps) {
+export function CitySelector({ onSearch }: { onSearch: (city: string) => void }) {
   const [input, setInput] = useState('')
 
-  function handleSearch() {
+  const handleSearch = () => {
     if (input.trim()) {
       onSearch(input.trim())
-      setInput('')
     }
   }
 
   return (
-    <HStack mb={4}>
+    <HStack mb={4} w="100%" maxW="md">
       <Input
         placeholder="Digite o nome da cidade"
         value={input}
         onChange={e => setInput(e.target.value)}
         onKeyDown={e => e.key === 'Enter' && handleSearch()}
       />
-      <MotionButton
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.95 }}
-        onClick={handleSearch}
-      >
-      <Button onClick={handleSearch}>Buscar</Button>
-      </MotionButton>
+      <Button onClick={handleSearch} colorScheme="accent">
+        Buscar
+      </Button>
     </HStack>
   )
 }
