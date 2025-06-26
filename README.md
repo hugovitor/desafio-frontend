@@ -112,4 +112,4 @@ jest.config.js
 
 📸 Tela exemplo
 
-(Sugestão: inclua aqui um print da tela principal do app rodando)
+![image](https://github.com/user-attachments/assets/6f03248d-5801-4ed8-b989-fee30a3b544a)
